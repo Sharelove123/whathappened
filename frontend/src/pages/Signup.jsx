@@ -1,74 +1,126 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { ArrowRight, Mail, Lock, User as UserIcon } from 'lucide-react';
 
 export default function Signup() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { register } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setError('');
         try {
             await register(name, email, password);
             navigate('/dashboard');
         } catch (err) {
             setError('Failed to create account. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 bg-white p-8 border border-gray-200 rounded-lg shadow-sm">
-            <h2 className="text-2xl font-bold text-center mb-6">Join the Community</h2>
-            {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Display Name</label>
-                    <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                        required
-                    />
+        <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-slate-900">
+            {/* Background Decor */}
+            <div className="absolute top-1/4 -right-20 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+            <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+
+            <div className="w-full max-w-md relative z-10">
+                <div className="text-center mb-10">
+                    <Link to="/" className="inline-flex items-center justify-center space-x-2 group">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                            <span className="text-white font-bold text-xl leading-none">W</span>
+                        </div>
+                    </Link>
+                    <h2 className="mt-6 text-3xl font-extrabold text-slate-100 tracking-tight">Join the Community</h2>
+                    <p className="mt-2 text-sm text-slate-400">Your safe space awaits.</p>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Email Address</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                        required
-                    />
+
+                <div className="glass-panel rounded-2xl p-8">
+                    {error && (
+                        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
+                            <p className="text-sm text-red-400 text-center">{error}</p>
+                        </div>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Display Name</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <UserIcon size={18} className="text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+                                </div>
+                                <input
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="block w-full pl-11 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all outline-none"
+                                    placeholder="How should we call you?"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Email address</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Mail size={18} className="text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+                                </div>
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="block w-full pl-11 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all outline-none"
+                                    placeholder="you@email.com"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <Lock size={18} className="text-slate-500 group-focus-within:text-purple-400 transition-colors" />
+                                </div>
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="block w-full pl-11 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all outline-none"
+                                    placeholder="••••••••"
+                                    required
+                                    minLength={6}
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full flex items-center justify-center space-x-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold py-3 px-4 rounded-xl shadow-lg shadow-indigo-500/25 transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:hover:translate-y-0"
+                        >
+                            <span>{isLoading ? 'Creating account...' : 'Create Account'}</span>
+                            {!isLoading && <ArrowRight size={18} />}
+                        </button>
+                    </form>
+
+                    <p className="mt-8 text-center text-sm text-slate-400">
+                        Already have an account?{' '}
+                        <Link to="/login" className="font-semibold text-purple-400 hover:text-purple-300 transition-colors">
+                            Sign in
+                        </Link>
+                    </p>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700">Password</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
-                        required
-                        minLength={6}
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700"
-                >
-                    Create Account
-                </button>
-            </form>
-            <p className="mt-4 text-center text-sm text-gray-600">
-                Already have an account?{' '}
-                <Link to="/login" className="font-medium text-blue-600 hover:text-blue-500">
-                    Sign in
-                </Link>
-            </p>
+            </div>
         </div>
     );
 }
