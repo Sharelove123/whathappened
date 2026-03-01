@@ -26,8 +26,12 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 
 // import routes
 const user = require("./controller/user");
+const chatRoutes = require("./controller/chatRoutes");
+const messageRoutes = require("./controller/messageRoutes");
 
 app.use("/api/v2/user", user);
+app.use("/api/v2/chat", chatRoutes);
+app.use("/api/v2/message", messageRoutes);
 
 // it's for ErrorHandling
 app.use(ErrorHandler);

@@ -31,4 +31,42 @@ export const authService = {
     }
 };
 
+export const chatService = {
+    fetchChats: async () => {
+        const response = await api.get('/chat');
+        return response.data;
+    },
+    accessChat: async (userId) => {
+        const response = await api.post('/chat', { userId });
+        return response.data;
+    },
+    createGroupChat: async (name, users) => {
+        const response = await api.post('/chat/group', { name, users: JSON.stringify(users.map(u => u._id)) });
+        return response.data;
+    },
+    renameGroup: async (chatId, chatName) => {
+        const response = await api.put('/chat/rename', { chatId, chatName });
+        return response.data;
+    },
+    addToGroup: async (chatId, userId) => {
+        const response = await api.put('/chat/groupadd', { chatId, userId });
+        return response.data;
+    },
+    removeFromGroup: async (chatId, userId) => {
+        const response = await api.put('/chat/groupremove', { chatId, userId });
+        return response.data;
+    },
+};
+
+export const messageService = {
+    fetchMessages: async (chatId) => {
+        const response = await api.get(`/message/${chatId}`);
+        return response.data;
+    },
+    sendMessage: async (content, chatId) => {
+        const response = await api.post('/message', { content, chatId });
+        return response.data;
+    },
+};
+
 export default api;
