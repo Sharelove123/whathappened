@@ -1,26 +1,43 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ArrowRight, Mail, Lock, User as UserIcon } from 'lucide-react';
+import { ArrowRight, Mail, Lock, User as UserIcon, Camera } from 'lucide-react';
 
 export default function Signup() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [avatar, setAvatar] = useState('');
+    const [avatarPreview, setAvatarPreview] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const { register } = useAuth();
     const navigate = useNavigate();
+
+    const handleAvatarChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setAvatarPreview(reader.result);
+                    setAvatar(reader.result);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         setError('');
         try {
-            await register(name, email, password);
-            navigate('/dashboard');
+            const res = await register(name, email, password, avatar);
+            alert(res.message || "Please check your email to activate your account!");
+            navigate('/login');
         } catch (err) {
-            setError('Failed to create account. Please try again.');
+            setError(err?.response?.data?.message || 'Failed to create account. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -98,8 +115,31 @@ export default function Signup() {
                                     className="block w-full pl-11 pr-4 py-3 bg-slate-800/50 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500 transition-all outline-none"
                                     placeholder="••••••••"
                                     required
-                                    minLength={6}
+                                    minLength={4}
                                 />
+                            </div>
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-slate-300 mb-2">Avatar</label>
+                            <div className="flex items-center space-x-4">
+                                <div className="relative group w-16 h-16 rounded-full border-2 border-dashed border-slate-600 flex items-center justify-center overflow-hidden hover:border-purple-500 transition-colors bg-slate-800 shrink-0 cursor-pointer">
+                                    {avatarPreview ? (
+                                        <img src={avatarPreview} alt="Avatar Preview" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <Camera size={24} className="text-slate-500 group-hover:text-purple-400 transition-colors" />
+                                    )}
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleAvatarChange}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        required
+                                    />
+                                </div>
+                                <div className="text-sm text-slate-400">
+                                    Upload a profile picture. Valid formats: JPG, PNG.
+                                </div>
                             </div>
                         </div>
 

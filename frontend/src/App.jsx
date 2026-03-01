@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Activation from './pages/Activation';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 
@@ -17,6 +18,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/activation/:token" element={<Activation />} />
               <Route element={<ProtectedRoute />}>
                 <Route path="/dashboard" element={<div className="text-xl font-bold p-10">Welcome to your Dashboard (Protected)</div>} />
               </Route>
