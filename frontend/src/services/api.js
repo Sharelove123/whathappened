@@ -28,6 +28,10 @@ export const authService = {
     getMe: async () => {
         const response = await api.get('/user/getuser');
         return response.data;
+    },
+    searchUsers: async (search) => {
+        const response = await api.get(`/user?search=${search}`);
+        return response.data;
     }
 };
 

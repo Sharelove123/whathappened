@@ -166,6 +166,29 @@ router.get(
     })
 );
 
+// get all users / search users
+router.get(
+    "/",
+    isAuthenticated,
+    catchAsyncErrors(async (req, res, next) => {
+        try {
+            const keyword = req.query.search
+                ? {
+                    $or: [
+                        { name: { $regex: req.query.search, $options: "i" } },
+                        { email: { $regex: req.query.search, $options: "i" } },
+                    ],
+                }
+                : {};
+
+            const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+            res.send(users);
+        } catch (error) {
+            return next(new ErrorHandler(error.message, 500));
+        }
+    })
+);
+
 // log out user
 router.get(
     "/logout",
