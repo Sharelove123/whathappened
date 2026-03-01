@@ -30,6 +30,9 @@ export default function Navbar() {
                                 <Link to="/dashboard" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
                                     Dashboard
                                 </Link>
+                                <Link to="/chats" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+                                    Chats
+                                </Link>
                                 <div className="flex items-center space-x-4 border-l border-slate-700 pl-6">
                                     <div className="flex items-center space-x-2">
                                         <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center border border-slate-600">
