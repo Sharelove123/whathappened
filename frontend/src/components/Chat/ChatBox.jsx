@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ChatState } from '../context/ChatContext';
-import { useAuth } from '../context/AuthContext';
-import { messageService } from '../services/api';
+import { ChatState } from '../../context/ChatContext';
+import { useAuth } from '../../context/AuthContext';
+import { messageService } from '../../services/api';
 import io from 'socket.io-client';
 
 const ENDPOINT = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api/v2', '') : 'http://localhost:8000';
